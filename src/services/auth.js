@@ -3,10 +3,7 @@ import createHttpError from "http-errors";
 import { randomBytes } from "crypto";
 import { UsersCollection } from "../db/models/user.js";
 import { SessionsCollection } from "../db/models/session.js";
-
-// IMPORTANT: should transfer as export to src/constants/index.js file later
-const TWO_HOURS = 2 * 60 * 60 * 1000;
-const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
+import { TWO_HOURS, THIRTY_DAYS } from "../constants/index.js";
 
 export const registerUser = async (payload) => {
     const user = await UsersCollection.findOne({ email: payload.email });

@@ -1,7 +1,5 @@
 import { registerUser, loginUser } from "../services/auth.js";
-
-// IMPORTANT: this const will be in src/constants/index.js later
-const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
+import { THIRTY_DAYS } from "../constants/index.js";
 
 export const registerUserController = async (req, res) => {
     const user = await registerUser(req.body);
