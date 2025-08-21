@@ -4,6 +4,9 @@ import pino from 'pino-http';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
+import { errorHandler } from './middlewares/errorHandler.js';
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
+
 import router from './routers/index.js';
 import authRoutes from './routers/authRoutes.js';
 import recipeRoutes from './routers/recipeRoutes.js';
@@ -29,11 +32,15 @@ export function setupServer() {
   );
 
   app.use(router);
+ feature/add-recipe-page
   app.use('/api/auth', authRoutes);
   app.use('/api/recipes', recipeRoutes);
   // app.use(notFoundHandler);
 
-  // app.use(errorHandler);
+  app.use(notFoundHandler);
+  base-structure
+
+  app.use(errorHandler);
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
