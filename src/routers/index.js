@@ -9,10 +9,10 @@ const router = Router();
 
 // Приклад:
 // router.use('/contacts', contactsRouter);
-router.use('api/auth', authRouter);
-router.use('api/users', usersRouter);
-router.use('api/categories', categoriesRouter);
-router.use('api/ingredients', ingredientsRouter);
-router.use('api/recipes', recipesRouter);
+router.use('/api/auth', authRouter);
+router.use('/api/users', usersRouter);
+router.use('/api/categories', categoriesRouter);
+router.use('/api/ingredients', ingredientsRouter);
+router.use('/api/recipes', recipesRouter);
 
 export default router;
