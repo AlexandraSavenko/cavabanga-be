@@ -29,8 +29,14 @@ export function setupServer() {
   );
 
   app.use(router);
+
+  
   app.use('/api/auth', authRoutes);
   app.use('/api/recipes', recipeRoutes);
+
+
+
+  
   // app.use(notFoundHandler);
 
   // app.use(errorHandler);
