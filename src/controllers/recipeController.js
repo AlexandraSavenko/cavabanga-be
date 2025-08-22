@@ -14,6 +14,7 @@ export const createRecipe = async (req, res) => {
           { folder: "recipes" },
           (error, result) => {
             if (error) return reject(error);
+            
             resolve(result);
           }
         );
@@ -22,6 +23,7 @@ export const createRecipe = async (req, res) => {
       photoUrl = result.secure_url;
     }
     const parsedIngredients = Array.isArray(ingredients) ? ingredients : JSON.parse(ingredients);
+
     const newRecipe = await Recipe.create({
       title,
       description,
