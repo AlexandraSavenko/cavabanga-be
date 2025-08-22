@@ -6,7 +6,7 @@ export const getRecipeByIdController = ctrlWrapper(async (req, res, next) => {
   const { id } = req.params;
   const recipe = await getRecipeById(id);
   if (!recipe) {
-    throw createError(404, 'Recipe not found');
+    throw createError(404, 'Recipe not found, try again later');
   }
   res.json({
     status: 200,
