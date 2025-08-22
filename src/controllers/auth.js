@@ -3,10 +3,23 @@ import { THIRTY_DAYS } from "../constants/index.js";
 
 export const registerUserController = async (req, res) => {
     const user = await registerUser(req.body);
+    const loginData = {
+        email: req.body.email,
+        password: req.body.password
+    };
+    const session = await loginUser(loginData);
+    const resData = {
+        user: user,
+        accessToken: session.accessToken,
+    };
+    console.log("resData: ", resData);
+    console.log("session: ", session);
+    console.log("req.body.password: ", req.body.password);
+
     res.status(201).json({
         status: 201,
         message: "Successfully registered a new user.",
-        data: user
+        data: resData
     });
 };
 
