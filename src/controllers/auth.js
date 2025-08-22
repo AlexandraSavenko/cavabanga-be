@@ -12,9 +12,6 @@ export const registerUserController = async (req, res) => {
         user: user,
         accessToken: session.accessToken,
     };
-    console.log("resData: ", resData);
-    console.log("session: ", session);
-    console.log("req.body.password: ", req.body.password);
 
     res.status(201).json({
         status: 201,
