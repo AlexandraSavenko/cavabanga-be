@@ -1,5 +1,4 @@
 import express from 'express';
-
 import pino from 'pino-http';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
@@ -10,9 +9,6 @@ import { notFoundHandler } from './middlewares/notFoundHandler.js';
 import router from './routers/index.js';
 import authRoutes from './routers/authRoutes.js';
 import recipeRoutes from './routers/recipeRoutes.js';
-
-
-
 
 const PORT = process.env.PORT || 3000;
 
@@ -33,18 +29,10 @@ export function setupServer() {
 
   app.use(router);
 
-
-  
   app.use('/api/auth', authRoutes);
   app.use('/api/recipes', recipeRoutes);
 
-
-
-  
-  // app.use(notFoundHandler);
   app.use(notFoundHandler);
-
-
   app.use(errorHandler);
 
   app.listen(PORT, () => {

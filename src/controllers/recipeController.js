@@ -31,7 +31,7 @@ export const createRecipe = async (req, res) => {
       ingredients: parsedIngredients,
       instructions,
       photo: photoUrl,
-      userId: req.user.userId, 
+      userId: req.user._id,
     });
     return res.status(201).json({
       message: "Recipe created successfully",
