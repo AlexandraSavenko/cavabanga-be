@@ -1,5 +1,5 @@
-import { Recipe } from '../db/models/recipe.js';
+import { RecipesCollection } from '../db/models/Recipe.js';
 
 export const getRecipeById = async (id) => {
-  return await Recipe.findById(id);
+  return await RecipesCollection.findById(id);
 };
