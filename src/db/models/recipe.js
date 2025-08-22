@@ -1,20 +1,46 @@
-import { Schema, model } from 'mongoose';
+import { model, Schema } from 'mongoose';
 
 const recipeSchema = new Schema({
-  title: { type: String, required: true },
-  image: { type: String },
-  description: { type: String },
-  ingredients: [{ type: String }],
-  steps: [{ type: String }],
-  info: {
-    category: {
-      type: String,
-      enum: ['breakfast', 'lunch', 'dinner'],
+  name: {
+    type: String,
+    required: true,
+  },
+  decr: {
+    type: String,
+    required: true,
+  },
+  cookiesTime: {
+    type: Number,
+    required: true,
+  },
+  cals: {
+    type: Number,
+    required: false,
+  },
+  category: {
+    type: Schema.Types.ObjectId,
+    ref: 'categories',
+    required: true,
+  },
+  ingredient: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'ingredients',
       required: true,
     },
-    cookingTime: { type: Number, required: true },
-    calories: { type: Number, required: true },
+  ],
+  ingredientAmount: {
+    type: Number,
+    required: true,
   },
-  timestamps: true,
+  instruction: {
+    type: String,
+    required: true,
+  },
+  recipeImg: {
+    type: String,
+    default: null,
+  },
 });
-export const Recipe = model('Recipe', recipeSchema);
+
+export const RecipesCollection = model('recipes', recipeSchema);

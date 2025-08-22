@@ -1,4 +1,4 @@
-import { registerUser, loginUser } from "../services/auth.js";
+import { registerUser, loginUser, logoutUser } from "../services/auth.js";
 import { THIRTY_DAYS } from "../constants/index.js";
 
 export const registerUserController = async (req, res) => {
@@ -23,9 +23,19 @@ export const loginUserController = async (req, res) => {
     });
     res.json({
         status: 200,
-        message: "The user has been successfully loged in.",
+        message: "The user has been successfully logged in.",
         data: {
             accessToken: session.accessToken,
         }
     });
+};
+
+export const logoutUserController = async (req, res) => {
+    if (req.cookies.sessionId) {
+        await logoutUser(req.cookies.sessionId);
+    }
+
+    res.clearCookie("sessionId");
+    res.clearCookie("refreshToken");
+    res.status(204).send();
 };
