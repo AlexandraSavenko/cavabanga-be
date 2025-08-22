@@ -1,8 +1,8 @@
 import createError from 'http-errors';
 import { getRecipeById } from '../services/recipes.js';
-import asyncWrapper from '../middlewares/asyncWrapper.js';
+import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
-export const getRecipeByIdController = asyncWrapper(async (req, res, next) => {
+export const getRecipeByIdController = ctrlWrapper(async (req, res, next) => {
   const { id } = req.params;
   const recipe = await getRecipeById(id);
   if (!recipe) {
