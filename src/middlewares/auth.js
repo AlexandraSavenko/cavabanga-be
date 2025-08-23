@@ -1,20 +1,20 @@
 import jwt from "jsonwebtoken";
-import { User } from "../models/User.js";
 
-export const auth = async (req, res, next) => {
+/**
+ * Usage:
+ *  app.use("/api/private", authMiddleware)
+ */
+export function authMiddleware(req, res, next) {
   try {
     const header = req.headers.authorization;
-    if (!header) return res.status(401).json({ message: "No token provided" });
-
+    if (!header?.startsWith("Bearer ")) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
     const token = header.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    const user = await User.findById(decoded.id);
-    if (!user) return res.status(401).json({ message: "Invalid token" });
-
-    req.user = user;
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = { id: payload?.id };
     next();
-  } catch (err) {
+  } catch {
     res.status(401).json({ message: "Unauthorized" });
   }
-};
+}

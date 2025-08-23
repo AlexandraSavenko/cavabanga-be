@@ -1,34 +1,17 @@
-import express from 'express';
+import "dotenv/config";
+import app from "./app.js";
+import { connectDB } from "./config/db.js";
 
-import pino from 'pino-http';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
+const PORT = process.env.PORT || 5000;
 
-import router from './routers/index.js';
-
-const PORT = process.env.PORT || 3000;
-
-export function setupServer() {
-  const app = express();
-
-  app.use(express.json());
-  app.use(cors());
-  app.use(cookieParser());
-
-  app.use(
-    pino({
-      transport: {
-        target: 'pino-pretty',
-      },
-    }),
-  );
-
-  app.use(router);
-  // app.use(notFoundHandler);
-
-  // app.use(errorHandler);
-
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
-}
+(async () => {
+  try {
+    await connectDB(process.env.MONGODB_URI);
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running at http://localhost:${PORT}`);
+    });
+  } catch (err) {
+    console.error("Failed to start server:", err);
+    process.exit(1);
+  }
+})();
