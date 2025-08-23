@@ -4,19 +4,14 @@ import { getAllRecipes, getOneRecipe } from "../controllers/recipeController.js"
 const router = Router();
 
 /**
- * GET /api/recipes
- * Query:
- *  - category=string
- *  - ingredient=<ingredientId>
- *  - ingredientName=<partial name>
- *  - search=<title contains>
- *  - page, limit
+ * Public search with filters + pagination
+ * GET /api/recipes?category=&ingredient=&search=&page=&limit=
  */
 router.get("/", getAllRecipes);
 
 /**
+ * Public details
  * GET /api/recipes/:id
- * Fetch single recipe by id.
  */
 router.get("/:id", getOneRecipe);
 

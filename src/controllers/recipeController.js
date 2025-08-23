@@ -2,18 +2,17 @@ import * as recipeService from "../services/recipeService.js";
 
 export async function getAllRecipes(req, res, next) {
   try {
-    const { category, ingredient, ingredientName, search, page, limit } = req.query;
+    const { category, ingredient, search, page, limit } = req.query;
 
-    const result = await recipeService.getRecipes({
+    const data = await recipeService.getRecipes({
       category,
-      ingredient,
-      ingredientName,
+      ingredient,   // can be ObjectId or name
       search,
-      page: page ? Number(page) : undefined,
-      limit: limit ? Number(limit) : undefined,
+      page,
+      limit,
     });
 
-    res.json(result);
+    res.json(data);
   } catch (err) {
     next(err);
   }

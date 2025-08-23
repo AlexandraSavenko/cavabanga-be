@@ -1,22 +1,16 @@
+import { isValidObjectId } from "mongoose";
 import { Recipe } from "../models/recipeModel.js";
 import { Ingredient } from "../models/ingredientModel.js";
 
 /**
- * Get recipes with filters + pagination.
+ * Fetch recipes with filters + pagination.
  * Supports:
  *  - category=string
- *  - ingredient=ObjectId (string) OR ingredientName=string (regex)
- *  - search=string (title contains, case-insensitive)
+ *  - ingredient=<ObjectId or name>    (if name, resolves to matching Ingredient ids)
+ *  - search=<title substring, case-insensitive>
  *  - page, limit
  */
-export async function getRecipes({
-  category,
-  ingredient,       // Ingredient ObjectId string
-  ingredientName,   // Ingredient name search (regex)
-  search,           // Title search
-  page = 1,
-  limit = 10,
-}) {
+export async function getRecipes({ category, ingredient, search, page = 1, limit = 10 }) {
   const filter = {};
 
   if (category) filter.category = category;
@@ -25,53 +19,48 @@ export async function getRecipes({
     filter.title = { $regex: search, $options: "i" };
   }
 
-  // Ingredient filtering by id or name
-  if (ingredient || ingredientName) {
+  if (ingredient) {
     let ingredientIds = [];
 
-    if (ingredient) {
+    if (isValidObjectId(ingredient)) {
       ingredientIds.push(ingredient);
-    }
-
-    if (ingredientName) {
-      const byName = await Ingredient.find(
-        { name: { $regex: ingredientName, $options: "i" } },
+    } else {
+      const found = await Ingredient.find(
+        { name: { $regex: ingredient, $options: "i" } },
         { _id: 1 }
       ).lean();
-      ingredientIds.push(...byName.map((d) => d._id.toString()));
+      ingredientIds = found.map((d) => d._id.toString());
     }
 
-    // If name query yields no matches, return empty result fast
     if (ingredientIds.length === 0) {
-      return { recipes: [], total: 0, page: Number(page), totalPages: 0 };
+      return { results: [], total: 0, page: Number(page), totalPages: 0 };
     }
 
     filter["ingredients.ingredient"] = { $in: ingredientIds };
   }
 
-  const skip = (Number(page) - 1) * Number(limit);
+  const pageNum = Math.max(1, Number(page) || 1);
+  const limitNum = Math.min(100, Math.max(1, Number(limit) || 10));
+  const skip = (pageNum - 1) * limitNum;
 
-  const [recipes, total] = await Promise.all([
+  const [results, total] = await Promise.all([
     Recipe.find(filter)
       .populate("ingredients.ingredient", "name unit calories")
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(Number(limit))
+      .limit(limitNum)
       .lean(),
     Recipe.countDocuments(filter),
   ]);
 
   return {
-    recipes,
+    results,
     total,
-    page: Number(page),
-    totalPages: Math.ceil(total / Number(limit)) || 0,
+    page: pageNum,
+    totalPages: Math.ceil(total / limitNum) || 0,
   };
 }
 
-/**
- * Get single recipe by id.
- */
 export async function getRecipeById(id) {
   return Recipe.findById(id)
     .populate("ingredients.ingredient", "name unit calories")

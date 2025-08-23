@@ -4,11 +4,10 @@ const recipeSchema = new Schema(
   {
     title: { type: String, required: true, index: true },
     image: { type: String },
-    category: { type: String, index: true }, // e.g. "salad", "dessert"
-    cookTime: { type: String },               // "30 min" or numeric if you prefer
+    category: { type: String, index: true },
+    cookTime: { type: String },   // or Number if you prefer strictly minutes
     calories: { type: Number },
 
-    // Link to Ingredient documents with per-recipe quantity
     ingredients: [
       {
         ingredient: { type: Schema.Types.ObjectId, ref: "Ingredient", required: true },
@@ -16,11 +15,9 @@ const recipeSchema = new Schema(
       },
     ],
 
-    // Step-by-step instructions
     instructions: [{ type: String }],
   },
   { versionKey: false, timestamps: true }
 );
 
 export const Recipe = model("Recipe", recipeSchema);
-
