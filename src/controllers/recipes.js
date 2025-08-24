@@ -1,8 +1,7 @@
 import createError from 'http-errors';
 import { getRecipeById } from '../services/recipes.js';
-import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
-export const getRecipeByIdController = ctrlWrapper(async (req, res, next) => {
+export const getRecipeByIdController = async (req, res, next) => {
   const { id } = req.params;
   const recipe = await getRecipeById(id);
   if (!recipe) {
@@ -13,4 +12,4 @@ export const getRecipeByIdController = ctrlWrapper(async (req, res, next) => {
     message: 'Recipe retrieved successfully',
     data: recipe,
   });
-});
+};
