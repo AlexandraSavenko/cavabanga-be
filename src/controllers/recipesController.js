@@ -1,42 +1,25 @@
-import { RecipesCollection } from '../db/models/recipe.js';
+import { getOwnRecipes } from '../services/recipesService.js';
 
-export const createOwnRecipe = async (req, res, next) => {
-    const { title, description, time, calories } = req.body;
-    const owner = req.user._id; 
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
 
-    try {
-        const newRecipe = await RecipesCollection.create({
-            title,
-            description,
-            time,
-            calories,
-            owner,
-        });
-        res.status(201).json({
-            message: 'Recipe created successfully',
-            recipe: newRecipe,
-        });
-    } catch (error) {
-        next(error);
-    }
-};
+export const getRecipesController = async (req, res) => {
+    const { page, perPage } = parsePaginationParams(req.query);
+    const { sortBy, sortOrder } = parseSortParams(req.query);
 
-export const getOwnRecipes = async (req, res, next) => {
-    const ownerId = req.user._id;
-
-    const { page = 1, limit = 9 } = req.query;
-    const skip = (page - 1) * limit;
-
-    try {
-        const recipes = await RecipesCollection.find({ owner: ownerId })
-            .skip(skip)
-            .limit(limit);
-
-        const total = await RecipesCollection.countDocuments({ owner: ownerId });
-        const hasMore = total > (skip + limit);
-
-        res.status(200).json({ recipes, hasMore });
-    } catch (error) {
-        next(error);
-    }
+    const recipes = await getOwnRecipes(
+        {
+            page,
+            perPage,
+            sortBy,
+            sortOrder,
+        },
+        req.user._id,
+    );
+    
+    res.json({
+        status: 200,
+        message: 'Successfully found recipes!',
+        data: recipes,
+    });
 };
