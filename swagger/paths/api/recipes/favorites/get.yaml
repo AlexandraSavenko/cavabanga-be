@@ -1,0 +1,44 @@
+tags:
+  - Favorites
+summary: Add a recipe to favorites
+operationId: addFavorite
+description: Add a recipe to the user's list of favorite recipes
+security:
+  - bearerAuth: []
+parameters:
+  - in: path
+    name: recipeId
+    required: true
+    schema:
+      type: string
+    description: ID of the recipe to add
+    example: '64f1c2b1e8a3a12f5a1b2c3d'
+responses:
+  '201':
+    description: Recipe added to favorites
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - favorites
+          properties:
+            status:
+              type: integer
+              example: 201
+            message:
+              type: string
+              example: Recipe successfully added to favorites!
+            favorites:
+              type: array
+              items:
+                type: string
+                example: '64f1c2b1e8a3a12f5a1b2c3d'
+  '400':
+    $ref: '../../components/responses/400.yaml'
+  '401':
+    $ref: '../../components/responses/401.yaml'
+  '500':
+    $ref: '../../components/responses/500.yaml'

@@ -1,0 +1,70 @@
+type: object
+required:
+  - name
+  - decr
+  - cookiesTime
+  - category
+  - ingredient
+  - ingredientAmount
+  - instruction
+properties:
+  _id:
+    type: string
+    format: objectId
+    description: Unique identifier of the recipe
+    example: '64f1e2a5b1234567890abcd1'
+  name:
+    type: string
+    description: Name of the recipe
+    example: 'Chocolate Chip Cookies'
+  decr:
+    type: string
+    description: Description of the recipe
+    example: 'Delicious homemade chocolate chip cookies.'
+  cookiesTime:
+    type: number
+    description: Preparation time in minutes
+    example: 25
+  cals:
+    type: number
+    description: Calories (optional)
+    example: 200
+  category:
+    type: string
+    format: objectId
+    description: ID of the recipe category
+    example: '64f1e2a5b1234567890abcde'
+  ingredient:
+    type: array
+    items:
+      type: string
+      format: objectId
+    description: List of ingredient IDs
+    example: ['64f1e2a5b1234567890abcdf', '64f1e2a5b1234567890abcd0']
+  ingredientAmount:
+    type: number
+    description: Amount of ingredients
+    example: 150
+  instruction:
+    type: string
+    description: Cooking instructions
+    example: 'Mix ingredients, bake at 180°C for 15 minutes.'
+  recipeImg:
+    type: string
+    format: uri
+    nullable: true
+    description: URL of the recipe image
+    example: 'https://example.com/images/chocolate-cookies.jpg'
+example:
+  _id: '64f1e2a5b1234567890abcd1'
+  name: 'Chocolate Chip Cookies'
+  decr: 'Delicious homemade chocolate chip cookies.'
+  cookiesTime: 25
+  cals: 200
+  category: '64f1e2a5b1234567890abcde'
+  ingredient:
+    - '64f1e2a5b1234567890abcdf'
+    - '64f1e2a5b1234567890abcd0'
+  ingredientAmount: 150
+  instruction: 'Mix ingredients, bake at 180°C for 15 minutes.'
+  recipeImg: 'https://example.com/images/chocolate-cookies.jpg'
