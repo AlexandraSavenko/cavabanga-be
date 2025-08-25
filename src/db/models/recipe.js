@@ -41,6 +41,11 @@ const recipeSchema = new Schema({
     type: String,
     default: null,
   },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: 'users',
+    required: true,
+  },
 });
 
-export const RecipesCollection = model('recipes', recipeSchema);
+export const RecipesCollection = model('Recipes', recipeSchema);
