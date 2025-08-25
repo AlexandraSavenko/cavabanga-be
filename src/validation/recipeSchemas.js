@@ -1,13 +1,16 @@
-import Joi from "joi";
+import Joi from 'joi';
 
 export const recipeSchemaJoi = Joi.object({
-  name: Joi.string().min(2).max(100).required(),
-  decr: Joi.string().max(500).optional(),
-  ingredients: Joi.array().items(Joi.string()).min(1).required(),
+  name: Joi.string().min(2).max(64).required(),
+  decr: Joi.string().max(200).optional(),
+  ingredient: Joi.array()
+    .items(Joi.string().hex().length(24))
+    .min(1)
+    .required(),
   category: Joi.string().required(),
-  instruction: Joi.string().min(5).required(),
-  cookiesTime: Joi.number().min(1).optional(),
-  cals: Joi.number().min(0).optional(),
+  instruction: Joi.string().max(1200).required(),
+  cookiesTime: Joi.number().min(1).max(360).optional(),
+  cals: Joi.number().min(1).max(10000).optional(),
   recipeImg: Joi.string().uri().optional(),
-  ingredientAmount: Joi.string().required()
+  ingredientAmount: Joi.number().min(2).max(16).required(),
 });

@@ -1,36 +1,19 @@
-import { createRecipeService } from "../services/recipeServices.js";
+import { createRecipeService } from '../services/recipeServices.js';
 
 export const createRecipe = async (req, res) => {
-  const {
-    name,
-    decr,
-    cookiesTime,
-    cals,
-    category,
-    ingredients,
-    ingredientAmount,
-    instruction,
-  } = req.body;
-
   const recipeImg = req.file?.path || null;
 
   const newRecipe = await createRecipeService({
-    name,
-    decr,
-    cookiesTime,
-    cals,
-    category,
-    ingredients,
-    ingredientAmount,
-    instruction,
+    ...req.body,
     recipeImg,
-    userId: req.user._id,
+    owner: req.user._id,
+    category: req.body.category,
+    ingredient: req.body.ingredient,
   });
 
   res.status(201).json({
     status: 201,
-    message: "Recipe created successfully",
+    message: 'Recipe created successfully',
     recipe: newRecipe,
   });
 };
-

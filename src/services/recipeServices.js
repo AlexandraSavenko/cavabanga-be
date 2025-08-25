@@ -1,6 +1,6 @@
-import { Recipe } from "../db/models/recipe.js";
+import { RecipesCollection } from '../db/models/recipe.js';
 
-export const createRecipeService = async (recipeData) => {
-  const newRecipe = await Recipe.create(recipeData);
+export const createRecipeService = async (payload) => {
+  const newRecipe = await RecipesCollection.create(payload);
   return newRecipe;
 };
