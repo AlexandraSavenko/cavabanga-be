@@ -34,13 +34,8 @@ export function setupServer() {
   app.use(errorHandler);
 
   app.use('/api/recipes', recipes);
-  
+
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
 }
-
-
-
-
-

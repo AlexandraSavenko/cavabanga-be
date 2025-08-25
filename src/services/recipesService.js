@@ -15,7 +15,9 @@ export const getOwnRecipes = async (
   const limit = perPage;
   const skip = (page - 1) * perPage;
 
-  const recipesQuery = RecipesCollection.find({userId});
+  const recipesQuery = RecipesCollection.find({ owner: userId });
+
+  console.log(recipesQuery);
   if (filter.type) {
     recipesQuery.where('recipeType').equals(filter.type);
   }
@@ -40,4 +42,3 @@ export const getOwnRecipes = async (
     ...paginationData,
   };
 };
-
