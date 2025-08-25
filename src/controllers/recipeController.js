@@ -3,9 +3,9 @@ import { createRecipeService } from "../services/recipeServices.js";
 export const createRecipe = async (req, res) => {
   const {
     name,
-    description,
-    cookingTime,
-    calories,
+    decr,
+    cookiesTime,
+    cals,
     category,
     ingredients,
     ingredientAmount,
@@ -16,9 +16,9 @@ export const createRecipe = async (req, res) => {
 
   const newRecipe = await createRecipeService({
     name,
-    description,
-    cookingTime,
-    calories,
+    decr,
+    cookiesTime,
+    cals,
     category,
     ingredients,
     ingredientAmount,
