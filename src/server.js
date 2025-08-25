@@ -6,9 +6,7 @@ import cookieParser from 'cookie-parser';
 
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
-
 import recipes from './routers/recipes.js';
-
 import router from './routers/index.js';
 
 const PORT = process.env.PORT || 3000;
