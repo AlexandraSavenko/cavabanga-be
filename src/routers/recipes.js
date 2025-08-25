@@ -6,8 +6,6 @@ import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 const router = Router();
 
 router.get('/own', authenticate, ctrlWrapper(getRecipesController));
+router.get('/:id', ctrlWrapper(getRecipeByIdController));
 
 export default router;
-
-
-
