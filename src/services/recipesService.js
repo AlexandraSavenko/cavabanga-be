@@ -17,7 +17,6 @@ export const getOwnRecipes = async (
 
   const recipesQuery = RecipesCollection.find({ owner: userId });
 
-  console.log(recipesQuery);
   if (filter.type) {
     recipesQuery.where('recipeType').equals(filter.type);
   }

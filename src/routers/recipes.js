@@ -1,5 +1,6 @@
-import { Router } from "express";
+import { Router } from 'express';
 import { getRecipesController } from '../controllers/recipesController.js';
+import { getRecipeByIdController } from '../controllers/recipes.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
