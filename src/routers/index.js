@@ -8,8 +8,6 @@ import recipesRouter from './recipes.js';
 
 const router = Router();
 
-// Приклад:
-// router.use('/contacts', contactsRouter);
 router.use('/api/auth', authRouter);
 router.use('/api/users', usersRouter);
 router.use('/api/categories', categoriesRouter);

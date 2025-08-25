@@ -1,15 +1,26 @@
-import createError from 'http-errors';
-import { getRecipeById } from '../services/recipes.js';
+import * as recipeService from "../services/recipeService.js";
 
-export const getRecipeByIdController = async (req, res, next) => {
-  const { id } = req.params;
-  const recipe = await getRecipeById(id);
-  if (!recipe) {
-    throw createError(404, 'Recipe not found, try again later');
-  }
-  res.json({
-    status: 200,
-    message: 'Recipe retrieved successfully',
-    data: recipe,
+export const getRecipes = async (req, res) => {
+  const { category, ingredient, search, page = 1, limit = 10 } = req.query;
+
+  const data = await recipeService.getRecipes({
+    category,
+    ingredient,
+    search,
+    page,
+    limit,
   });
+
+  res.json(data);
+};
+
+export const getRecipeById = async (req, res) => {
+  const { id } = req.params;
+
+  const recipe = await recipeService.getRecipeById(id);
+  if (!recipe) {
+    return res.status(404).json({ message: "Recipe not found" });
+  }
+
+  res.json(recipe);
 };

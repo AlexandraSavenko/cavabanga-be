@@ -1,11 +1,10 @@
-import { Router } from "express";
-import { getRecipesController } from '../controllers/recipesController.js';
-import { authenticate } from '../middlewares/authenticate.js';
-import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+import express from "express";
+import { getRecipes, getRecipeById } from "../controllers/recipesController.js";
+import ctrlWrapper from "../utils/ctrlWrapper.js";
 
-const router = Router();
+const router = express.Router();
 
-router.get('/own', authenticate, ctrlWrapper(getRecipesController));
-router.get('/:id', ctrlWrapper(getRecipeByIdController));
+router.get("/", ctrlWrapper(getRecipes));
+router.get("/:id", ctrlWrapper(getRecipeById));
 
 export default router;
