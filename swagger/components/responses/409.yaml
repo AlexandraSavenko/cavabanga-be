@@ -1,4 +1,4 @@
-description: UnauthorizedError
+description: ConflictError
 content:
   application/json:
     schema:
@@ -9,7 +9,7 @@ content:
       properties:
         status:
           type: integer
-          example: 401
+          example: 409
         message:
           type: string
-          example: Session is not found.
+          example: Email in use

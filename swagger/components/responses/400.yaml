@@ -3,10 +3,6 @@ content:
   application/json:
     schema:
       type: object
-      required:
-        - status
-        - message
-        - data
       properties:
         status:
           type: integer
@@ -14,7 +10,3 @@ content:
         message:
           type: string
           example: Bad Request
-        data:
-          type: array
-          items:
-            type: string
