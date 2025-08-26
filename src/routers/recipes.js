@@ -22,13 +22,17 @@ import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 
 const router = Router();
 
-router.use(authenticate);
 // створити приватний ендпоінт для отримання улюблених рецептів
-router.get('/favorites', ctrlWrapper(getFavoriteRecipesController));
+router.get(
+  '/favorites',
+  authenticate,
+  ctrlWrapper(getFavoriteRecipesController),
+);
 
 // створити приватний ендпоінт для видалення рецепту зі списку улюблених
 router.delete(
   '/favorites/:recipeId',
+  authenticate,
   isValidId,
   ctrlWrapper(deleteFavoriteRecipeController),
 );
@@ -36,6 +40,7 @@ router.delete(
 // створити приватний ендпоінт для додавання рецепту до списку улюблених
 router.post(
   '/favorites/:recipeId',
+  authenticate,
   isValidId,
   ctrlWrapper(postFavoriteRecipeController),
 );
