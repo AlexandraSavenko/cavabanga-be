@@ -1,41 +1,44 @@
-import { registerUser, loginUser, logoutUser } from "../services/auth.js";
-import { THIRTY_DAYS } from "../constants/index.js";
+import { registerUser, loginUser, logoutUser } from '../services/auth.js';
+import { THIRTY_DAYS } from '../constants/index.js';
 
+// створити публічний ендпоінт реєстрації користувача
 export const registerUserController = async (req, res) => {
-    const user = await registerUser(req.body);
-    res.status(201).json({
-        status: 201,
-        message: "Successfully registered a new user.",
-        data: user
-    });
+  const user = await registerUser(req.body);
+  res.status(201).json({
+    status: 201,
+    message: 'Successfully registered a new user.',
+    data: user,
+  });
 };
 
+// створити публічний ендпоінт логінізації користувача
 export const loginUserController = async (req, res) => {
-    const session = await loginUser(req.body);
+  const session = await loginUser(req.body);
 
-    res.cookie("refreshToken", session.refreshToken, {
-        httpOnly: true,
-        expires: new Date(Date.now() + THIRTY_DAYS)
-    });
-    res.cookie("sessionId", session._id, {
-        httpOnly: true,
-        expires: new Date(Date.now() + THIRTY_DAYS)
-    });
-    res.json({
-        status: 200,
-        message: "The user has been successfully logged in.",
-        data: {
-            accessToken: session.accessToken,
-        }
-    });
+  res.cookie('refreshToken', session.refreshToken, {
+    httpOnly: true,
+    expires: new Date(Date.now() + THIRTY_DAYS),
+  });
+  res.cookie('sessionId', session._id, {
+    httpOnly: true,
+    expires: new Date(Date.now() + THIRTY_DAYS),
+  });
+  res.json({
+    status: 200,
+    message: 'The user has been successfully logged in.',
+    data: {
+      accessToken: session.accessToken,
+    },
+  });
 };
 
+// створити приватний ендпоінт для логаута користувача
 export const logoutUserController = async (req, res) => {
-    if (req.cookies.sessionId) {
-        await logoutUser(req.cookies.sessionId);
-    }
+  if (req.cookies.sessionId) {
+    await logoutUser(req.cookies.sessionId);
+  }
 
-    res.clearCookie("sessionId");
-    res.clearCookie("refreshToken");
-    res.status(204).send();
+  res.clearCookie('sessionId');
+  res.clearCookie('refreshToken');
+  res.status(204).send();
 };
