@@ -1,6 +1,6 @@
 import { model, Schema } from 'mongoose';
 
-const categorieSchema = new Schema({
+const categoriesSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -8,4 +8,4 @@ const categorieSchema = new Schema({
   },
 });
 
-export const CategoriesCollection = model('categories', categorieSchema);
+export const CategoriesCollection = model('categories', categoriesSchema);
