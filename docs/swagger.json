@@ -277,6 +277,237 @@
           }
         }
       }
+    },
+    "/api/recipes/favorites": {
+      "get": {
+        "tags": [
+          "Recipes"
+        ],
+        "summary": "Get all favorite recipes (private)",
+        "operationId": "getAllFavoriteRecipes",
+        "description": "Returns a paginated list of all recipes marked as favorites by the authenticated user.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "example": 1
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "in": "query",
+            "name": "perPage",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 12,
+              "example": 12
+            },
+            "description": "Number of recipes per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully fetched favorite recipes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully fetched favorite recipes"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/recipes"
+                          }
+                        },
+                        "page": {
+                          "type": "integer",
+                          "example": 1
+                        },
+                        "perPage": {
+                          "type": "integer",
+                          "example": 12
+                        },
+                        "totalCount": {
+                          "type": "integer",
+                          "example": 42
+                        },
+                        "totalPages": {
+                          "type": "integer",
+                          "example": 4
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/api/recipes/favorites/{recipeId}": {
+      "post": {
+        "tags": [
+          "Recipes"
+        ],
+        "summary": "Add a recipe to favorites (private)",
+        "operationId": "postFavoriteId",
+        "description": "Adds the specified recipe to the authenticated user's list of favorites.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "recipeId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the recipe to be added to favorites",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Recipe successfully added to favorites",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Recipe added to favorites"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/recipes"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Recipes"
+        ],
+        "summary": "Remove a recipe from favorites (private)",
+        "operationId": "removeFavoriteRecipe",
+        "description": "Removes the specified recipe from the user's list of favorites.",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "recipeId",
+            "in": "path",
+            "required": true,
+            "description": "ID of the recipe to be removed from favorites (24-character hex string)",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-fA-F0-9]{24}$",
+              "example": "665123abc321cc0011aa23ef"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Recipe successfully removed from favorites",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Recipe removed from favorites"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "recipeId": {
+                          "type": "string",
+                          "example": "665123abc321cc0011aa23ef"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -419,6 +650,126 @@
             "example": "2025-08-25T18:40:46.577Z"
           }
         }
+      },
+      "ingredientsWithAmount": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name ingredient in Ingredients",
+            "example": "Olive Oil"
+          },
+          "measure": {
+            "type": "string",
+            "example": "120ml"
+          }
+        }
+      },
+      "recipes": {
+        "type": "object",
+        "required": [
+          "_id",
+          "title",
+          "category",
+          "owner",
+          "area",
+          "instructions",
+          "description",
+          "thumb",
+          "time",
+          "ingredients",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Recept id",
+            "example": "6841738d9abba11274e4c270"
+          },
+          "title": {
+            "type": "string",
+            "description": "Recept title",
+            "example": "Battenberg Cake"
+          },
+          "category": {
+            "type": "string",
+            "description": "Type Recept",
+            "enum": [
+              "Seafood",
+              "Lamb",
+              "Starter",
+              "Chicken",
+              "Beef",
+              "Dessert",
+              "Vegan",
+              "Pork",
+              "Vegetarian",
+              "Miscellaneous",
+              "Pasta",
+              "Breakfast",
+              "Side",
+              "Goat",
+              "Soup"
+            ],
+            "example": "Pork"
+          },
+          "owner": {
+            "type": "string",
+            "description": "Recept userId",
+            "example": "684173599abba11274e4c268"
+          },
+          "area": {
+            "type": "string",
+            "description": "Place of origin",
+            "example": "British"
+          },
+          "instructions": {
+            "type": "string",
+            "description": "Instructions recept",
+            "example": "Heat oven to 180C/160C fan/gas 4 and line the base and sides of a 20cm square tin with baking parchment (the easiest...."
+          },
+          "description": {
+            "type": "string",
+            "description": "Rescription recept",
+            "example": "A classic British cake made with almond sponge cake and covered with marzipan. It is traditionally pink and yellow checkered in appearance."
+          },
+          "thumb": {
+            "type": "string",
+            "description": "foto recept",
+            "example": "https://ftp.goit.study/img/so-yummy/preview/Battenberg%20Cake.jpg"
+          },
+          "time": {
+            "type": "string",
+            "description": "Recipe preparation time",
+            "example": 60
+          },
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ingredientsWithAmount"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Recipe created at",
+            "example": "2025-06-27T08:41:53.166Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Recipe updated at",
+            "example": "2025-06-27T08:41:53.166Z"
+          },
+          "cals": {
+            "type": "number",
+            "description": "amount of calories",
+            "minimum": 1,
+            "maximum": 10000,
+            "example": 350
+          }
+        }
       }
     },
     "responses": {
@@ -440,6 +791,43 @@
                 "message": {
                   "type": "string",
                   "example": "Session is not found."
+                }
+              }
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message",
+                "data"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 404
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Not found"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Not found"
+                    }
+                  }
                 }
               }
             }

@@ -36,6 +36,17 @@ paths:
   /users:
     get:
       $ref: '../swagger/paths/users/get.yaml'
+
+  /api/recipes/favorites:
+    get:
+      $ref: ../swagger/paths/recipes/getAllFavorite.yaml
+
+  /api/recipes/favorites/{recipeId}:
+    post:
+      $ref: ../swagger/paths/recipes/postFavorite.yaml
+    delete:
+      $ref: ../swagger/paths/recipes/deleteFavorite.yaml
+
 components:
   securitySchemes:
     bearerAuth:
