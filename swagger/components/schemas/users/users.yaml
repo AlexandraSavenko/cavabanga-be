@@ -1,0 +1,41 @@
+type: object
+required:
+  - _id
+  - name
+  - email
+  - savedRecipes
+  - createdAt
+  - updatedAt
+properties:
+  _id:
+    type: string
+    description: Users id
+    example: 68ac2873b0640ef82fb32038
+  name:
+    type: string
+    maxLength: 16
+    description: Users name
+    example: Oleksandr Serbyn
+  email:
+    type: string
+    maxLength: 128
+    pattern: /.+@.+\..+/
+    description: Users email
+    example: oleksandr.serbyn@gmail.com
+  savedRecipes:
+    type: array
+    items:
+      type: string
+      format: Mongo ObjectId
+      example:
+        - 68ac425c67bf894ba7634759
+  createdAt:
+    type: string
+    format: date-time
+    description: Contact created at
+    example: 2025-08-25T09:10:11.565Z
+  updatedAt:
+    type: string
+    format: date-time
+    description: Contact updated at
+    example: 2025-08-25T18:40:46.577Z

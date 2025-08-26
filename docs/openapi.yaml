@@ -7,17 +7,35 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
   description: This is a documentation of cavabanga app
 tags:
-  - name: Favorites
-    description: Operations about favorites recipes.
+  - name: Auth
+    description: Auth operations.
+  - name: Categories
+    description: Categories operations.
+  - name: Ingredients
+    description: Ingredients operations.
+  - name: Users
+    description: Users operations.
+  - name: Recipes
+    description: Recipes operations.
 
 servers:
   - url: http://localhost:3000
   - url: cavabanga-be.onrender.com
-paths:
-  api/recipes/favorites:
-    get:
-      $ref: ../swagger/paths/api/recipes/favorites/get.yaml
 
+paths:
+  /api/auth/register:
+    post:
+      $ref: ../swagger/paths/auth/register/post.yaml
+  /api/auth/login:
+    post:
+      $ref: ../swagger/paths/auth/login/post.yaml
+  /api/auth/logout:
+    post:
+      $ref: ../swagger/paths/auth/logout/post.yaml
+
+  /users:
+    get:
+      $ref: '../swagger/paths/users/get.yaml'
 components:
   securitySchemes:
     bearerAuth:

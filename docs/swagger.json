@@ -19,14 +19,263 @@
   ],
   "tags": [
     {
-      "name": "Favorites",
-      "description": "Operations about favorites recipes."
+      "name": "Auth",
+      "description": "Auth operations."
+    },
+    {
+      "name": "Categories",
+      "description": "Categories operations."
+    },
+    {
+      "name": "Ingredients",
+      "description": "Ingredients operations."
+    },
+    {
+      "name": "Users",
+      "description": "Users operations."
+    },
+    {
+      "name": "Recipes",
+      "description": "Recipes operations."
     }
   ],
   "paths": {
-    "api/recipes/favorites": {
+    "/api/auth/register": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Registration user",
+        "operationId": "registerUser",
+        "description": "Registration new user in App",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/register-request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Create a new user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully registered a new user."
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/register-pesponse"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "$ref": "#/components/responses/409"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Login user",
+        "operationId": "loginUser",
+        "description": "Login user",
+        "security": [],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "password"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "description": "user`s email",
+                    "format": "email",
+                    "maxLength": 128,
+                    "example": "oleksandr.serbynd@gmail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 128,
+                    "description": "User`s password",
+                    "example": 12345678
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "The user has been successfully logged in."
+                    },
+                    "data": {
+                      "allOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "accessToken": {
+                              "type": "string",
+                              "description": "JWT access token",
+                              "example": "hSIqeEzTHnkGqV2bjlG7DLZ0Wbstmviag5LTLp7t"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 401
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Email or password is incorrect."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Logout user",
+        "operationId": "logoutUser",
+        "description": "Logout user",
+        "security": [],
+        "responses": {
+          "204": {
+            "description": "Successfully logout"
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
+      }
+    },
+    "/users": {
       "get": {
-        "$ref": "../swagger/paths/api/recipes/favorites/get.yaml"
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get users info",
+        "operationId": "getUserInfo",
+        "description": "Get info about current user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get info about current user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully found info about current user"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/users"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          }
+        }
       }
     }
   },
@@ -35,6 +284,215 @@
       "bearerAuth": {
         "type": "http",
         "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "register-request": {
+        "type": "object",
+        "required": [
+          "name",
+          "email",
+          "password"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 16,
+            "description": "Users name",
+            "example": "Oleksandr Serbyn"
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 128,
+            "pattern": "/.+@.+\\..+/",
+            "description": "Users email",
+            "example": "oleksandr.serbyn@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 128,
+            "minLength": 8,
+            "description": "User's password",
+            "example": 12345678
+          }
+        }
+      },
+      "register-pesponse": {
+        "type": "object",
+        "required": [
+          "name",
+          "email",
+          "savedRecipes",
+          "_id",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 16,
+            "description": "User`s name",
+            "example": "Oleksandr Serbyn"
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 128,
+            "description": "user`s email",
+            "example": "oleksandr.serbyn@gmail.com"
+          },
+          "savedRecipes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "Mongo ObjectId",
+              "example": null
+            }
+          },
+          "_id": {
+            "type": "string",
+            "description": "Users id",
+            "example": "68ad81a2d4dccf268027cb12"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Contact created at",
+            "example": "2025-08-26T09:42:58.211Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Contact updated at",
+            "example": "2025-08-26T09:42:58.211Z"
+          }
+        }
+      },
+      "users": {
+        "type": "object",
+        "required": [
+          "_id",
+          "name",
+          "email",
+          "savedRecipes",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Users id",
+            "example": "68ac2873b0640ef82fb32038"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 16,
+            "description": "Users name",
+            "example": "Oleksandr Serbyn"
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 128,
+            "pattern": "/.+@.+\\..+/",
+            "description": "Users email",
+            "example": "oleksandr.serbyn@gmail.com"
+          },
+          "savedRecipes": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "Mongo ObjectId",
+              "example": [
+                "68ac425c67bf894ba7634759"
+              ]
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Contact created at",
+            "example": "2025-08-25T09:10:11.565Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Contact updated at",
+            "example": "2025-08-25T18:40:46.577Z"
+          }
+        }
+      }
+    },
+    "responses": {
+      "401": {
+        "description": "UnauthorizedError",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 401
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Session is not found."
+                }
+              }
+            }
+          }
+        }
+      },
+      "409": {
+        "description": "ConflictError",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 409
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Email in use"
+                }
+              }
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "status",
+                "message"
+              ],
+              "properties": {
+                "status": {
+                  "type": "integer",
+                  "example": 500
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Internal Server Error"
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
