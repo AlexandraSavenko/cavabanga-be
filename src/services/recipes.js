@@ -140,7 +140,7 @@ export const getDishes = async ({
   const paginationData = calculatePaginationData(dishesCount, perPage, page);
 
   return {
-    dishes,
+    data: dishes,
     ...paginationData,
   };
 };

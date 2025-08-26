@@ -29,25 +29,21 @@ export const getRecipeByIdController = async (req, res, next) => {
 
 // створити публічний ендпоінт для пошуку рецептів за категорією, інгредієнтом, входженням пошукового значення в назву рецепту (з урахуванням логіки пагінації)
 export const getRecipesSearch = async (req, res, next) => {
-  try {
-    const { name, category, ingredient, page, limit } = req.query;
+  const { name, category, ingredient, page, limit } = req.query;
 
-    const result = await getDishes({
-      name,
-      category,
-      ingredient,
-      page: Number(page) || 1,
-      perPage: Number(limit) || 10, // 🔹 узгодив із dishService
-    });
+  const result = await getDishes({
+    name,
+    category,
+    ingredient,
+    page: Number(page) || 1,
+    perPage: Number(limit) || 12, // 🔹 узгодив із dishService
+  });
 
-    res.json({
-      status: 200,
-      message: 'Recipes retrieved successfully',
-      data: result,
-    });
-  } catch (error) {
-    next(error);
-  }
+  res.json({
+    status: 200,
+    message: 'Recipes retrieved successfully',
+    data: result,
+  });
 };
 
 // створити приватний ендпоінт для отримання власних рецептів
