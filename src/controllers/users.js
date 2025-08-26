@@ -1,5 +1,6 @@
 import { getUserInfo } from '../services/users.js';
 
+// створити приватний ендпоінт на отримання інформації про поточного користувача
 export const getUserController = async (req, res, next) => {
   const { id: userId } = req.user;
 
