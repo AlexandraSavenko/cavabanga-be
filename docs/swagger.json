@@ -1,1 +1,41 @@
-{}
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Cavabanga app",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "description": "This is a documentation of cavabanga app"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000"
+    },
+    {
+      "url": "cavabanga-be.onrender.com"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Favorites",
+      "description": "Operations about favorites recipes."
+    }
+  ],
+  "paths": {
+    "api/recipes/favorites": {
+      "get": {
+        "$ref": "../swagger/paths/api/recipes/favorites/get.yaml"
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

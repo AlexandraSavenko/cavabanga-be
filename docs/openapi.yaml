@@ -12,17 +12,11 @@ tags:
 
 servers:
   - url: http://localhost:3000
-  - url: https://example.com/api/v1
+  - url: cavabanga-be.onrender.com
 paths:
-    api/recipes/favorites:
+  api/recipes/favorites:
     get:
       $ref: ../swagger/paths/api/recipes/favorites/get.yaml
-    api/recipes/favorites/{id}:
-    post:
-      $ref: ../swagger/paths/api/recipes/favorites/{id}/post.yaml
-    delete:
-      $ref: ../swagger/paths/api/recipes/favorites/{id}/delete.yaml
-    get:
 
 components:
   securitySchemes:
