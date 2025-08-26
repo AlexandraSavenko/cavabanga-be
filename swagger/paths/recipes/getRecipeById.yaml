@@ -1,21 +1,21 @@
 tags:
   - Recipes
-summary: Add a recipe to favorites (private)
-operationId: postFavoriteId
-description: Adds the specified recipe to the authenticated user's list of favorites.
-security:
-  - bearerAuth: []
+summary: Get a recipe by ID
+operationId: getId
+description: Returns a single recipe created by the user, based on its unique identifier.
+security: []
 parameters:
   - name: recipeId
     in: path
     required: true
-    description: ID of the recipe to be added to favorites
+    description: Unique identifier of the recipe
     schema:
       type: string
       pattern: '^[a-fA-F0-9]{24}$'
+      example: 665123abc321cc0011aa23ef
 responses:
   '200':
-    description: Recipe successfully added to favorites
+    description: Successfully retrieved the recipe
     content:
       application/json:
         schema:
@@ -26,11 +26,9 @@ responses:
               example: 200
             message:
               type: string
-              example: Recipe added to favorites
-            favoriteRecipes:
-              type: array
-              items:
-               example: 68ac420b67bf894ba7634755
+              example: Successfully found your recipe with 665123abc321cc0011aa23ef!
+            data:
+              $ref: ../../components/schemas/recipes/recipes.yaml
   '401':
     $ref: ../../components/responses/401.yaml
   '500':

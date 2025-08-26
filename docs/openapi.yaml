@@ -37,6 +37,18 @@ paths:
     get:
       $ref: '../swagger/paths/users/get.yaml'
 
+  /api/recipes:
+    get:
+      $ref: ../swagger/paths/recipes/getAll.yaml
+    post:
+      $ref: ../swagger/paths/recipes/postCreateRecipes.yaml
+  /api/recipes/own:
+    get:
+      $ref: ../swagger/paths/recipes/getRecipeOwn.yaml
+  /api/recipes/{recipeId}:
+    get:
+      $ref: ../swagger/paths/recipes/getRecipeById.yaml
+
   /api/recipes/favorites:
     get:
       $ref: ../swagger/paths/recipes/getAllFavorite.yaml
