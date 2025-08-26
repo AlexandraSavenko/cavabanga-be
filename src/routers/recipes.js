@@ -14,7 +14,7 @@ import { parseIngredients } from '../middlewares/parseIngredients.js';
 import { getRecipesController } from '../controllers/recipesController.js';
 import { getRecipeByIdController } from '../controllers/recipes.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
-
+import { getRecipesSearch } from '../controllers/recipes.js';
 const router = Router();
 
 router.use(authenticate);
@@ -44,5 +44,5 @@ router.post(
 
 router.get('/own', authenticate, ctrlWrapper(getRecipesController));
 router.get('/:id', ctrlWrapper(getRecipeByIdController));
-
+router.get('/', ctrlWrapper(getRecipesSearch));
 export default router;
