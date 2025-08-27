@@ -1,5 +1,3 @@
-import createError from 'http-errors';
-
 import {
   getRecipeById,
   getOwnRecipes,
@@ -17,9 +15,6 @@ import { parseSortParams } from '../utils/parseSortParams.js';
 export const getRecipeByIdController = async (req, res, next) => {
   const { id } = req.params;
   const recipe = await getRecipeById(id);
-  if (!recipe) {
-    throw createError(404, 'Recipe not found, try again later');
-  }
   res.json({
     status: 200,
     message: 'Recipe retrieved successfully',
@@ -71,7 +66,6 @@ export const getRecipesController = async (req, res) => {
 // створити приватний ендпоінт для створення власного рецепту
 export const createRecipe = async (req, res) => {
   const recipeImg = req.file?.path || null;
-
   const newRecipe = await createRecipeService({
     ...req.body,
     recipeImg,

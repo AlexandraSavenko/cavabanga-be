@@ -8,7 +8,22 @@ import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 
 // створити публічний ендпоінт для отримання детальної інформації про рецепт за його id
 export const getRecipeById = async (id) => {
-  return await RecipesCollection.findById(id);
+  const recipe = await RecipesCollection.findById(id).populate({
+    path: 'ingredient.id',
+    select: 'name',
+  });
+  if (!recipe) {
+    throw createHttpError(404, 'Recipe not found, try again later');
+  }
+  const formattedRecipe = recipe.toObject();
+  formattedRecipe.ingredient = formattedRecipe.ingredient.map((item) => {
+    return {
+      name: item.id.name,
+      ingredientAmount: item.ingredientAmount,
+    };
+  });
+
+  return formattedRecipe;
 };
 
 // створити приватний ендпоінт для отримання власних рецептів
@@ -25,29 +40,36 @@ export const getOwnRecipes = async (
   const limit = perPage;
   const skip = (page - 1) * perPage;
 
-  const recipesQuery = RecipesCollection.find({ owner: userId });
+  const recipesQuery = RecipesCollection.find({ owner: userId }).populate({
+    path: 'ingredient.id',
+    select: 'name',
+  });
 
-  if (filter.type) {
-    recipesQuery.where('recipeType').equals(filter.type);
+  const recipeCount = await RecipesCollection.find()
+    .merge(recipesQuery)
+    .countDocuments();
+
+  const recipes = await recipesQuery.skip(skip).limit(limit).exec();
+  if (recipes.length == 0) {
+    throw createHttpError(404, 'Recipe not found, try again later');
   }
-
-  if (filter.isFavourite !== undefined) {
-    recipesQuery.where('isFavourite').equals(filter.isFavourite);
-  }
-
-  const [recipeCount, recipes] = await Promise.all([
-    RecipesCollection.find().merge(recipesQuery).countDocuments(),
-    recipesQuery
-      .skip(skip)
-      .limit(limit)
-      .sort({ [sortBy]: sortOrder })
-      .exec(),
-  ]);
+  const formattedRecipes = recipes.map((recipe) => {
+    const recipeObject = recipe.toObject();
+    if (recipeObject.ingredient) {
+      recipeObject.ingredient = recipeObject.ingredient.map((item) => {
+        return {
+          name: item.id.name,
+          ingredientAmount: item.ingredientAmount,
+        };
+      });
+    }
+    return recipeObject;
+  });
 
   const paginationData = calculatePaginationData(recipeCount, perPage, page);
 
   return {
-    data: recipes,
+    data: formattedRecipes,
     ...paginationData,
   };
 };
@@ -129,7 +151,10 @@ export const getDishes = async ({
     filters.ingredient = ingredient;
   }
 
-  const dishesQuery = RecipesCollection.find(filters);
+  const dishesQuery = RecipesCollection.find(filters).populate({
+    path: 'ingredient.id',
+    select: 'name',
+  });
 
   // Отримуємо список і кількість паралельно
   const [dishesCount, dishes] = await Promise.all([
@@ -137,10 +162,27 @@ export const getDishes = async ({
     dishesQuery.skip(skip).limit(limit).exec(),
   ]);
 
+  if (dishes.length == 0) {
+    throw createHttpError(404, 'Recipe not found, try again later');
+  }
+
+  const formattedRecipes = dishes.map((recipe) => {
+    const recipeObject = recipe.toObject();
+    if (recipeObject.ingredient) {
+      recipeObject.ingredient = recipeObject.ingredient.map((item) => {
+        return {
+          name: item.id.name,
+          ingredientAmount: item.ingredientAmount,
+        };
+      });
+    }
+    return recipeObject;
+  });
+
   const paginationData = calculatePaginationData(dishesCount, perPage, page);
 
   return {
-    data: dishes,
+    data: formattedRecipes,
     ...paginationData,
   };
 };
