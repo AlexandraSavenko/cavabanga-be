@@ -4,6 +4,6 @@ properties:
     type: string
     description: Name ingredient in Ingredients
     example: Olive Oil
-  measure:
+  ingredientAmount:
     type: string
     example: 120ml

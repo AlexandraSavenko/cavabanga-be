@@ -6,10 +6,19 @@ content:
       required:
         - status
         - message
+        - data
       properties:
         status:
           type: integer
           example: 401
         message:
           type: string
-          example: Session is not found.
+          example: UnauthorizedError
+        data:
+          type: object
+          required:
+            - message
+          properties:
+            message:
+              type: string
+              example: Session is not found.

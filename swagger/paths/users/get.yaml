@@ -2,7 +2,7 @@ tags:
   - Users
 summary: Get users info
 operationId: getUserInfo
-description: Get info about current user
+description: Get info about current user (private)
 security:
   - bearerAuth: []
 responses:

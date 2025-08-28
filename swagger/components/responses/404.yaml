@@ -1,4 +1,4 @@
-description: Not found
+description: NotFoundError
 content:
   application/json:
     schema:
@@ -13,7 +13,7 @@ content:
           example: 404
         message:
           type: string
-          example: Not found
+          example: NotFoundError
         data:
           type: object
           required:

@@ -33,16 +33,16 @@ parameters:
       type: string
       pattern: '^[a-fA-F0-9]{24}$'
       example: 640c2dd963a319ea671e37aa
-  - name: title
+  - name: name
     in: query
-    description: Partial search by title
+    description: Partial search by name
     required: false
     schema:
       type: string
 security: []
 responses:
   '200':
-    description: Successfully retrieved the list
+    description: Recipes retrieved successfully
     content:
       application/json:
         schema:
