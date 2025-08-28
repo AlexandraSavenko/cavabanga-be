@@ -85,10 +85,33 @@ export const getAllFavoriteRecipes = async (userId) => {
   const user = await UsersCollection.findById(userId).populate('savedRecipes'); // можна підтягнути деталі рецептів
 
   if (!user) {
-    throw createHttpError(404, 'User not found');
+    throw createHttpError(404, 'Not found');
   }
+  const savedRecipeIds = user.savedRecipes;
 
-  return user.savedRecipes;
+  const favoriteRecipes = await RecipesCollection.find({
+    _id: { $in: savedRecipeIds },
+  }).populate({
+    path: 'ingredient.id',
+    select: 'name',
+  });
+
+  const formattedFavoriteRecipes = favoriteRecipes.map((recipe) => {
+    const recipeObject = recipe.toObject();
+    if (recipeObject.ingredient) {
+      recipeObject.ingredient = recipeObject.ingredient.map((item) => {
+        return {
+          name: item.id.name,
+          ingredientAmount: item.ingredientAmount,
+        };
+      });
+    }
+    return recipeObject;
+  });
+
+  return {
+    data: formattedFavoriteRecipes,
+  };
 };
 
 // створити приватний ендпоінт для видалення рецепту зі списку улюблених

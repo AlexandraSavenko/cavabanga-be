@@ -46,8 +46,7 @@ responses:
                 - _id: '6462a6cd4c3d0ddd28897f90'
                   name: 'Vegan'
 
-  '401':
-    $ref: '../../components/responses/401.yaml'
-
+  '404':
+    $ref: '../../components/responses/404.yaml'
   '500':
     $ref: '../../components/responses/500.yaml'

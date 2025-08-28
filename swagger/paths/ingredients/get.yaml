@@ -57,8 +57,8 @@ responses:
                   desc: 'Tender and juicy meat from a pig, commonly used in various savory dishes.'
                   img: 'https://ftp.goit.study/img/so-yummy/ingredients/640c2dd963a319ea671e37f6.png'
 
-  '401':
-    $ref: '../../components/responses/401.yaml'
+  '404':
+    $ref: '../../components/responses/404.yaml'
 
   '500':
     $ref: '../../components/responses/500.yaml'

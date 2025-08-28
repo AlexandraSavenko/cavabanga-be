@@ -52,7 +52,7 @@ responses:
                       description: JWT access token
                       example: hSIqeEzTHnkGqV2bjlG7DLZ0Wbstmviag5LTLp7t
   '401':
-    description: Unauthorized Error
+    description: UnauthorizedError
     content:
       application/json:
         schema:
@@ -60,12 +60,21 @@ responses:
           required:
             - status
             - message
+            - data
           properties:
             status:
               type: integer
               example: 401
             message:
               type: string
-              example: Email or password is incorrect.
+              example: UnauthorizedError
+            data:
+              type: object
+              required:
+                - message
+              properties:
+                message:
+                  type: string
+                  example: Email or password is incorrect.
   '500':
     $ref: ../../../components/responses/500.yaml

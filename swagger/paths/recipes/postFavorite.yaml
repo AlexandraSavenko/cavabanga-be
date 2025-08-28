@@ -30,8 +30,29 @@ responses:
             favoriteRecipes:
               type: array
               items:
-               example: 68ac420b67bf894ba7634755
+                example: 68ac420b67bf894ba7634755
   '401':
     $ref: ../../components/responses/401.yaml
+  '409':
+    description: Recipe successfully added to favorites
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 409
+            message:
+              type: string
+              example: ConflictError
+            data:
+              type: object
+              required:
+                - message
+              properties:
+                message:
+                  type: string
+                  example: Recipe already in favorites
   '500':
     $ref: ../../components/responses/500.yaml
