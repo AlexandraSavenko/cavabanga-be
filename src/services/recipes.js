@@ -3,6 +3,7 @@ import { SORT_ORDER } from '../constants/index.js';
 
 import { RecipesCollection } from '../db/models/recipe.js';
 import { UsersCollection } from '../db/models/user.js';
+import { IngredientsCollection } from '../db/models/ingredient.js';
 
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 
@@ -162,47 +163,58 @@ export const getDishes = async ({
   const limit = perPage;
   const skip = (page - 1) * perPage;
 
-  // Формуємо фільтри
   const filters = {};
+
   if (name) {
-    filters.name = { $regex: name, $options: 'i' }; // пошук по входженню в назву
+    filters.name = { $regex: name, $options: 'i' };
   }
+
   if (category) {
     filters.category = category;
   }
+
   if (ingredient) {
-    filters.ingredient = ingredient;
+    filters['ingredient.id'] = { $regex: ingredient, $options: 'i' };
   }
 
-  const dishesQuery = RecipesCollection.find(filters).populate({
-    path: 'ingredient.id',
-    select: 'name',
-  });
+  const recipesQuery = RecipesCollection.find(filters);
 
-  // Отримуємо список і кількість паралельно
-  const [dishesCount, dishes] = await Promise.all([
+  const [recipesCount, recipes] = await Promise.all([
     RecipesCollection.countDocuments(filters),
-    dishesQuery.skip(skip).limit(limit).exec(),
+    recipesQuery.skip(skip).limit(limit).exec(),
   ]);
 
-  if (dishes.length == 0) {
+  if (recipes.length === 0) {
     throw createHttpError(404, 'Recipe not found, try again later');
   }
 
-  const formattedRecipes = dishes.map((recipe) => {
+  const allIngredientIds = recipes.flatMap((r) =>
+    r.ingredient.map((i) => i.id),
+  );
+
+  const uniqueIngredientIds = [...new Set(allIngredientIds)];
+
+  const ingredientsDocs = await IngredientsCollection.find({
+    _id: { $in: uniqueIngredientIds },
+  }).select('name');
+
+  const ingredientMap = {};
+  ingredientsDocs.forEach((doc) => {
+    ingredientMap[doc._id.toString()] = doc.name;
+  });
+
+  const formattedRecipes = recipes.map((recipe) => {
     const recipeObject = recipe.toObject();
     if (recipeObject.ingredient) {
-      recipeObject.ingredient = recipeObject.ingredient.map((item) => {
-        return {
-          name: item.id.name,
-          ingredientAmount: item.ingredientAmount,
-        };
-      });
+      recipeObject.ingredient = recipeObject.ingredient.map((item) => ({
+        name: ingredientMap[item.id] || item.id,
+        ingredientAmount: item.ingredientAmount,
+      }));
     }
     return recipeObject;
   });
 
-  const paginationData = calculatePaginationData(dishesCount, perPage, page);
+  const paginationData = calculatePaginationData(recipesCount, perPage, page);
 
   return {
     data: formattedRecipes,
