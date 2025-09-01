@@ -77,6 +77,7 @@ export const getOwnRecipes = async (
 
 // створити приватний ендпоінт для створення власного рецепту
 export const createRecipeService = async (payload) => {
+  console.log("serv");
   const newRecipe = await RecipesCollection.create(payload);
   return newRecipe;
 };
@@ -221,3 +222,4 @@ export const getDishes = async ({
     ...paginationData,
   };
 };
+
