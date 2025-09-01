@@ -65,6 +65,7 @@ export const getRecipesController = async (req, res) => {
 
 // створити приватний ендпоінт для створення власного рецепту
 export const createRecipe = async (req, res) => {
+  console.log('sd');
   const recipeImg = req.file?.path || null;
   const newRecipe = await createRecipeService({
     ...req.body,
